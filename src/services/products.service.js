@@ -9,4 +9,4 @@ async function createProducts(p) {
   return await product.guardarProduct(p)
 }
 
-module.exports = { getProducts, createProducts };
+module.exports = { getProducts, createProducts, product };

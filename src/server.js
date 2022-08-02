@@ -12,6 +12,12 @@ require("./config/mongoose")
 const cookieParser = require("cookie-parser")
 const session = require('express-session')
 
+//importo el schema creado en graphql
+const {schema} = require("./graphql/index");
+
+//servidor express que corre graphql (http)
+const { graphqlHTTP } = require("express-graphql");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }))
 
@@ -34,6 +40,18 @@ app.engine('.hbs', exphbs.engine({
 app.set('view engine', '.hbs');
 
 app.use("/", routerProducts)
+
+app.use(
+
+    //ruta 
+    "/graphql", 
+
+    //servidor
+    graphqlHTTP({
+        graphiql:true, 
+        schema
+    })
+)
 
 app.listen(process.env.PORT, ()=>{console.log(`escuchando puerto ${process.env.PORT}`)});
 app.on("error", error => console.log(`error en servidor ${error}`));
