@@ -12,11 +12,13 @@ require("./config/mongoose")
 const cookieParser = require("cookie-parser")
 const session = require('express-session')
 
-//importo el schema creado en graphql
-const {schema} = require("./graphql/index");
+// //importo el schema creado en graphql
+// const {schema} = require("./graphql/index");
 
 //servidor express que corre graphql (http)
 const { graphqlHTTP } = require("express-graphql");
+const { schema } = require("./graphql/schema/graphql.schema");
+const {createProduct, getProducts} = require("./graphql/functions/graphql.funtions")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }))
@@ -42,14 +44,15 @@ app.set('view engine', '.hbs');
 app.use("/", routerProducts)
 
 app.use(
-
-    //ruta 
     "/graphql", 
 
-    //servidor
     graphqlHTTP({
-        graphiql:true, 
-        schema
+        graphiql:true,
+        schema:  schema,
+        rootValue:{
+            getProducts,
+            createProduct
+        }
     })
 )
 
